@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MexiSonora · Comunidad Financiera</title>
+<meta name="description" content="Comparamos las mejores plataformas de inversión reguladas en México. Comunidad @mexisonora en X.">
+<meta property="og:title" content="MexiSonora · Comunidad Financiera MX">
+<meta property="og:description" content="Calculadora de rendimientos, comparativa de plataformas y noticias para invertir mejor en México.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@mexisonora">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1D9E75;
+    --green-light: #E1F5EE;
+    --green-mid: #9FE1CB;
+    --green-dark: #085041;
+    --green-deep: #04342C;
+    --amber: #BA7517;
+    --amber-light: #FAEEDA;
+    --coral: #D85A30;
+    --coral-light: #FAECE7;
+    --blue: #185FA5;
+    --blue-light: #E6F1FB;
+    --text: #1a1a18;
+    --text2: #5F5E5A;
+    --text3: #888780;
+    --bg: #ffffff;
+    --bg2: #F7F6F2;
+    --bg3: #F1EFE8;
+    --border: rgba(0,0,0,0.1);
+    --border2: rgba(0,0,0,0.18);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--green-dark);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--green); }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 13px;
+    color: var(--text2);
+    text-decoration: none;
+    transition: color .15s;
+  }
+  .nav-links a:hover { color: var(--green); }
+  .nav-cta {
+    background: var(--green);
+    color: #fff !important;
+    padding: 6px 18px;
+    border-radius: 99px;
+    font-size: 13px !important;
+    font-weight: 500;
+    text-decoration: none;
+    transition: opacity .15s;
+  }
+  .nav-cta:hover { opacity: .85; }
+
+  /* HERO */
+  .hero {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green-light);
+    color: var(--green-dark);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 16px;
+    border-radius: 99px;
+    margin-bottom: 1.5rem;
+    letter-spacing: .04em;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .5; transform: scale(1.4); }
+  }
+  .hero h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.12;
+    margin-bottom: 1.2rem;
+    color: var(--text);
+  }
+  .hero h1 .accent { color: var(--green); }
+  .hero p {
+    font-size: 1.05rem;
+    color: var(--text2);
+    max-width: 520px;
+    margin: 0 auto 2rem;
+    line-height: 1.75;
+  }
+  .hero-tags {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .hero-tag {
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: 99px;
+    border: 0.5px solid var(--border);
+    color: var(--text2);
+  }
+  .hero-tag.g { background: var(--green-light); color: var(--green-dark); border-color: transparent; }
+  .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--green);
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 99px;
+    font-size: .9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: opacity .15s;
+    font-family: 'Sora', sans-serif;
+  }
+  .btn-primary:hover { opacity: .85; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--green);
+    padding: 11px 26px;
+    border-radius: 99px;
+    font-size: .9rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1.5px solid var(--green);
+    transition: background .15s;
+    font-family: 'Sora', sans-serif;
+  }
+  .btn-secondary:hover { background: var(--green-light); }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--bg2);
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+    padding: 1.5rem 2rem;
+  }
+  .stats-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    text-align: center;
+  }
+  .stat-item {}
+  .stat-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--green);
+    display: block;
+  }
+  .stat-lbl { font-size: 12px; color: var(--text3); margin-top: 2px; }
+
+  /* SECTIONS */
+  section { padding: 4rem 2rem; max-width: 900px; margin: 0 auto; }
+  .sec-label {
+    font-family: 'Space Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 1rem;
+  }
+  .sec-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: .6rem;
+    color: var(--text);
+  }
+  .sec-sub { font-size: .95rem; color: var(--text2); margin-bottom: 2rem; line-height: 1.7; }
+  hr.divider { border: none; border-top: 0.5px solid var(--border); margin: 0; }
+
+  /* PLATAFORMAS */
+  .plat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 14px;
+  }
+  .plat-card {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.3rem;
+    transition: transform .15s, border-color .15s;
+    position: relative;
+  }
+  .plat-card:hover { transform: translateY(-3px); border-color: var(--border2); }
+  .plat-card.top { border: 2px solid var(--green); }
+  .top-badge {
+    position: absolute;
+    top: -11px;
+    left: 16px;
+    background: var(--green);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 12px;
+    border-radius: 99px;
+    letter-spacing: .04em;
+  }
+  .plat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: .85rem;
+  }
+  .plat-name { font-weight: 500; font-size: 1rem; margin-bottom: .2rem; }
+  .plat-type { font-size: 11px; color: var(--text3); margin-bottom: .6rem; }
+  .plat-desc { font-size: 13px; color: var(--text2); line-height: 1.55; margin-bottom: .85rem; }
+  .plat-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: .85rem;
+  }
+  .pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-weight: 500;
+  }
+  .pill-green { background: var(--green-light); color: var(--green-dark); }
+  .pill-amber { background: var(--amber-light); color: var(--amber); }
+  .pill-blue { background: var(--blue-light); color: var(--blue); }
+  .plat-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 500;
+    text-decoration: none;
+    border: 0.5px solid var(--green);
+    padding: 5px 14px;
+    border-radius: 99px;
+    transition: background .15s;
+  }
+  .plat-link:hover { background: var(--green-light); }
+
+  /* CALCULADORA */
+  .calc-wrap {
+    background: var(--bg2);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  .plat-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .ptab {
+    font-size: 12px;
+    padding: 6px 16px;
+    border-radius: 99px;
+    border: 0.5px solid var(--border2);
+    background: var(--bg);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all .15s;
+    font-family: 'Sora', sans-serif;
+  }
+  .ptab.active {
+    background: var(--green);
+    color: #fff;
+    border-color: transparent;
+    font-weight: 500;
+  }
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+  .slider-row label {
+    font-size: 13px;
+    color: var(--text2);
+    min-width: 130px;
+  }
+  .slider-row input[type=range] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--green-mid);
+    border-radius: 99px;
+    outline: none;
+  }
+  .slider-row input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--green);
+    cursor: pointer;
+  }
+  .slider-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 90px;
+    text-align: right;
+    color: var(--text);
+  }
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 1.5rem 0;
+  }
+  .metric {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    text-align: center;
+    border: 0.5px solid var(--border);
+  }
+  .metric-lbl { font-size: 11px; color: var(--text3); margin-bottom: 4px; }
+  .metric-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .metric-val.a { color: var(--amber); }
+  .chart-wrap { position: relative; width: 100%; height: 240px; margin: 1rem 0; }
+  .legend-row {
+    display: flex;
+    gap: 16px;
+    font-size: 11px;
+    color: var(--text3);
+    margin-bottom: .5rem;
+  }
+  .leg-sq {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-right: 4px;
+  }
+
+  /* COMPARATIVA */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: var(--bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 0.5px solid var(--border);
+  }
+  .compare-table th {
+    background: var(--bg2);
+    padding: .75rem 1rem;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text3);
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .compare-table td {
+    padding: .75rem 1rem;
+    border-bottom: 0.5px solid var(--border);
+    color: var(--text);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: var(--bg2); }
+  .chk { color: var(--green); font-weight: 700; }
+  .mono { font-family: 'Space Mono', monospace; font-size: 12px; }
+  .rate-badge {
+    display: inline-block;
+    background: var(--green-light);
+    color: var(--green-dark);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 99px;
+  }
+
+  /* NOTICIAS */
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .news-card {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.2rem;
+    transition: transform .15s;
+  }
+  .news-card:hover { transform: translateY(-2px); }
+  .news-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 10px;
+    border-radius: 99px;
+    font-weight: 600;
+    margin-bottom: .7rem;
+    letter-spacing: .04em;
+  }
+  .nt-up { background: var(--green-light); color: var(--green-dark); }
+  .nt-dn { background: #FCEBEB; color: #791F1F; }
+  .nt-inf { background: var(--blue-light); color: var(--blue); }
+  .news-title {
+    font-size: .9rem;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--text);
+    margin-bottom: .5rem;
+  }
+  .news-meta { font-size: 11px; color: var(--text3); }
+
+  /* CTA */
+  .cta-section {
+    background: var(--green-deep);
+    color: #fff;
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+  .cta-section h2 {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: .8rem;
+    color: #fff;
+  }
+  .cta-section p {
+    color: var(--green-mid);
+    font-size: .95rem;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-white {
+    background: #fff;
+    color: var(--green-dark);
+    padding: 12px 28px;
+    border-radius: 99px;
+    font-size: .9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity .15s;
+    font-family: 'Sora', sans-serif;
+  }
+  .btn-white:hover { opacity: .88; }
+  .btn-ghost {
+    background: transparent;
+    color: #fff;
+    padding: 11px 26px;
+    border-radius: 99px;
+    font-size: .9rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1.5px solid rgba(255,255,255,.4);
+    transition: border-color .15s;
+    font-family: 'Sora', sans-serif;
+  }
+  .btn-ghost:hover { border-color: #fff; }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg2);
+    border-top: 0.5px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text3);
+    line-height: 1.8;
+  }
+  footer a { color: var(--green); text-decoration: none; }
+
+  /* MOBILE */
+  @media (max-width: 600px) {
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    .hero { padding: 3rem 1rem 2.5rem; }
+    section { padding: 2.5rem 1rem; }
+    .metrics { grid-template-columns: 1fr 1fr; }
+    .metrics .metric:last-child { grid-column: 1/-1; }
+    .slider-row label { min-width: 90px; font-size: 12px; }
+    .cta-section { padding: 3rem 1rem; }
+    .cta-section h2 { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><span>Mexi</span>Sonora</a>
+  <ul class="nav-links">
+    <li><a href="#plataformas">Plataformas</a></li>
+    <li><a href="#calculadora">Calculadora</a></li>
+    <li><a href="#comparativa">Comparativa</a></li>
+    <li><a href="#noticias">Noticias</a></li>
+    <li><a class="nav-cta" href="https://x.com/mexisonora" target="_blank">@mexisonora en X</a></li>
+  </ul>
+  <a class="nav-cta" href="https://x.com/mexisonora" target="_blank" style="display:none" id="mob-cta">X →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Comunidad activa · @mexisonora</div>
+  <h1>Tu dinero,<br><span class="accent">bien colocado.</span></h1>
+  <p>Comparamos las mejores plataformas de ahorro e inversión reguladas en México y Latinoamérica. Sin humo, sin spam, solo información honesta de la comunidad.</p>
+  <div class="hero-tags">
+    <span class="hero-tag g">100% plataformas reguladas</span>
+    <span class="hero-tag">Desde $1 peso</span>
+    <span class="hero-tag">Sin comisiones ocultas</span>
+    <span class="hero-tag g">Comunidad libre</span>
+  </div>
+  <div class="hero-btns">
+    <a class="btn-primary" href="#calculadora">Calcula tu rendimiento</a>
+    <a class="btn-secondary" href="#plataformas">Ver plataformas</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item"><span class="stat-num">12</span><span class="stat-lbl">plataformas comparadas</span></div>
+    <div class="stat-item"><span class="stat-num">8.25%</span><span class="stat-lbl">rendimiento CETES anual</span></div>
+    <div class="stat-item"><span class="stat-num">$1</span><span class="stat-lbl">mínimo para invertir</span></div>
+    <div class="stat-item"><span class="stat-num">MX · LATAM</span><span class="stat-lbl">cobertura regional</span></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- PLATAFORMAS -->
+<section id="plataformas">
+  <p class="sec-label">Dónde poner tu dinero</p>
+  <h2 class="sec-title">Plataformas recomendadas</h2>
+  <p class="sec-sub">Todas reguladas por CNBV, CONDUSEF o la Secretaría de Hacienda. La comunidad las usa y las reporta.</p>
+
+  <div class="plat-grid">
+
+    <div class="plat-card top">
+      <span class="top-badge">más popular</span>
+      <div class="plat-icon" style="background:#E1F5EE;color:#085041">GBM</div>
+      <div class="plat-name">GBM+</div>
+      <div class="plat-type">Acciones · ETFs · CETES · Cuenta ahorro</div>
+      <div class="plat-desc">Casa de bolsa digital líder en México. Invertís desde $1 peso en acciones, ETFs y CETES. Cuenta de ahorro con rendimiento automático.</div>
+      <div class="plat-meta">
+        <span class="pill pill-green">Desde $1</span>
+        <span class="pill pill-amber">~5.1% anual</span>
+        <span class="pill pill-blue">CNBV</span>
+      </div>
+      <a class="plat-link" href="https://gbm.com.mx" target="_blank">Ir a GBM+ →</a>
+    </div>
+
+    <div class="plat-card">
+      <div class="plat-icon" style="background:#E6F1FB;color:#042C53">CTD</div>
+      <div class="plat-name">CETES Directo</div>
+      <div class="plat-type">Gobierno Federal · Sin riesgo</div>
+      <div class="plat-desc">Plataforma oficial de Hacienda. Respaldada por el gobierno mexicano. La opción más segura para capital de emergencia.</div>
+      <div class="plat-meta">
+        <span class="pill pill-green">Desde $100</span>
+        <span class="pill pill-amber">~8.25% anual</span>
+        <span class="pill pill-blue">SHCP</span>
+      </div>
+      <a class="plat-link" href="https://cetesdirecto.com" target="_blank">Ir a CETES →</a>
+    </div>
+
+    <div class="plat-card">
+      <div class="plat-icon" style="background:#FAEEDA;color:#633806">KSP</div>
+      <div class="plat-name">Kuspit</div>
+      <div class="plat-type">Fondos · CETES · Acciones MX y US</div>
+      <div class="plat-desc">Casa de bolsa 100% digital. Sin mínimo de inversión. Ideal para fondos de deuda y diversificación sencilla.</div>
+      <div class="plat-meta">
+        <span class="pill pill-green">Desde $1</span>
+        <span class="pill pill-amber">~4.8% anual</span>
+        <span class="pill pill-blue">CNBV</span>
+      </div>
+      <a class="plat-link" href="https://kuspit.com" target="_blank">Ir a Kuspit →</a>
+    </div>
+
+    <div class="plat-card">
+      <div class="plat-icon" style="background:#EAF3DE;color:#173404">NUV</div>
+      <div class="plat-name">Nu México</div>
+      <div class="plat-type">Cuenta Nu · Rendimiento diario</div>
+      <div class="plat-desc">El neobank que arrasa en México. Rendimiento automático sobre todo tu saldo en la Cuenta Nu. Sin papeles, sin sucursales.</div>
+      <div class="plat-meta">
+        <span class="pill pill-green">Desde $1</span>
+        <span class="pill pill-amber">~4.0% anual</span>
+        <span class="pill pill-blue">CNBV</span>
+      </div>
+      <a class="plat-link" href="https://nu.com.mx" target="_blank">Ir a Nu →</a>
+    </div>
+
+    <div class="plat-card">
+      <div class="plat-icon" style="background:#FAECE7;color:#4A1B0C">FIN</div>
+      <div class="plat-name">Finsus</div>
+      <div class="plat-type">Ahorro · Rendimiento diario · SOFIPO</div>
+      <div class="plat-desc">Fintech regulada como SOFIPO. Rendimiento automático sobre tu saldo, sin mínimos ni plazos forzosos. Protegida por el FGA.</div>
+      <div class="plat-meta">
+        <span class="pill pill-green">Desde $1</span>
+        <span class="pill pill-amber">~4.5% anual</span>
+        <span class="pill pill-blue">SOFIPO</span>
+      </div>
+      <a class="plat-link" href="https://finsus.mx" target="_blank">Ir a Finsus →</a>
+    </div>
+
+    <div class="plat-card">
+      <div class="plat-icon" style="background:#EEEDFE;color:#26215C">BTR</div>
+      <div class="plat-name">Bitso</div>
+      <div class="plat-type">Cripto · Dólares digitales · USDC</div>
+      <div class="plat-desc">Para diversificar en dólares o criptomonedas. Registrada ante CNBV como IFPE. Útil para cobertura cambiaria.</div>
+      <div class="plat-meta">
+        <span class="pill pill-green">Desde $50</span>
+        <span class="pill pill-amber">Variable</span>
+        <span class="pill pill-blue">IFPE</span>
+      </div>
+      <a class="plat-link" href="https://bitso.com" target="_blank">Ir a Bitso →</a>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CALCULADORA -->
+<section id="calculadora">
+  <p class="sec-label">Proyecta tu dinero</p>
+  <h2 class="sec-title">Calculadora de rendimientos</h2>
+  <p class="sec-sub">Selecciona una plataforma, ajusta tu inversión y ve cómo crece mes a mes.</p>
+
+  <div class="calc-wrap">
+    <div class="plat-tabs">
+      <button class="ptab active" data-rate="8.25" data-name="CETES Directo">CETES Directo</button>
+      <button class="ptab" data-rate="5.1" data-name="GBM+">GBM+</button>
+      <button class="ptab" data-rate="4.8" data-name="Kuspit">Kuspit</button>
+      <button class="ptab" data-rate="4.5" data-name="Finsus">Finsus</button>
+      <button class="ptab" data-rate="4.0" data-name="Nu México">Nu México</button>
+    </div>
+
+    <div class="slider-row">
+      <label>Inversión inicial</label>
+      <input type="range" id="capital" min="500" max="100000" step="500" value="5000">
+      <span class="slider-val" id="capital-out">$5,000</span>
+    </div>
+    <div class="slider-row">
+      <label>Aportación mensual</label>
+      <input type="range" id="aporte" min="0" max="5000" step="100" value="500">
+      <span class="slider-val" id="aporte-out">$500</span>
+    </div>
+    <div class="slider-row">
+      <label>Plazo</label>
+      <input type="range" id="meses" min="1" max="60" step="1" value="12">
+      <span class="slider-val" id="meses-out">12 meses</span>
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="metric-lbl">Saldo final</div><div class="metric-val" id="m-final">—</div></div>
+      <div class="metric"><div class="metric-lbl">Ganancia total</div><div class="metric-val" id="m-ganancia">—</div></div>
+      <div class="metric"><div class="metric-lbl">Tasa anual</div><div class="metric-val a" id="m-tasa">8.25%</div></div>
+    </div>
+
+    <div class="legend-row">
+      <span><span class="leg-sq" style="background:#1D9E75"></span>Saldo proyectado</span>
+      <span><span class="leg-sq" style="background:#9FE1CB"></span>Capital invertido</span>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="rendChart" role="img" aria-label="Gráfica de crecimiento de inversión mes a mes">Proyección de crecimiento de inversión.</canvas>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- COMPARATIVA -->
+<section id="comparativa">
+  <p class="sec-label">Lado a lado</p>
+  <h2 class="sec-title">Comparativa de plataformas</h2>
+  <p class="sec-sub">Un vistazo rápido para decidir dónde colocar tu dinero según tu perfil.</p>
+
+  <div style="overflow-x:auto">
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Plataforma</th>
+        <th>Mínimo</th>
+        <th>Tasa aprox.</th>
+        <th>Regulador</th>
+        <th>Liquidez</th>
+        <th>Garantía</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>CETES Directo</strong></td>
+        <td class="mono">$100</td>
+        <td><span class="rate-badge">8.25%</span></td>
+        <td>SHCP</td>
+        <td>28/91/182 días</td>
+        <td class="chk">Gobierno MX</td>
+      </tr>
+      <tr>
+        <td><strong>GBM+</strong></td>
+        <td class="mono">$1</td>
+        <td><span class="rate-badge">~5.1%</span></td>
+        <td>CNBV</td>
+        <td>Diaria</td>
+        <td class="chk">CNBV</td>
+      </tr>
+      <tr>
+        <td><strong>Kuspit</strong></td>
+        <td class="mono">$1</td>
+        <td><span class="rate-badge">~4.8%</span></td>
+        <td>CNBV</td>
+        <td>Diaria</td>
+        <td class="chk">CNBV</td>
+      </tr>
+      <tr>
+        <td><strong>Finsus</strong></td>
+        <td class="mono">$1</td>
+        <td><span class="rate-badge">~4.5%</span></td>
+        <td>SOFIPO</td>
+        <td>Inmediata</td>
+        <td class="chk">FGA hasta 25k UDIs</td>
+      </tr>
+      <tr>
+        <td><strong>Nu México</strong></td>
+        <td class="mono">$1</td>
+        <td><span class="rate-badge">~4.0%</span></td>
+        <td>CNBV</td>
+        <td>Inmediata</td>
+        <td class="chk">CNBV</td>
+      </tr>
+      <tr>
+        <td><strong>Bitso</strong></td>
+        <td class="mono">$50</td>
+        <td><span class="rate-badge">Variable</span></td>
+        <td>IFPE</td>
+        <td>Inmediata</td>
+        <td style="color:var(--text3)">Depende activo</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="font-size:11px;color:var(--text3);margin-top:.8rem">* Tasas aproximadas y pueden cambiar. Verifica siempre en el sitio oficial de cada plataforma.</p>
+</section>
+
+<hr class="divider">
+
+<!-- NOTICIAS -->
+<section id="noticias">
+  <p class="sec-label">Al día</p>
+  <h2 class="sec-title">Noticias financieras</h2>
+  <p class="sec-sub">Lo más relevante para la comunidad inversora en México.</p>
+
+  <div class="news-grid">
+    <div class="news-card">
+      <span class="news-tag nt-up">↑ Alza</span>
+      <div class="news-title">CETES a 28 días suben a 8.25% anual en la última subasta de Banxico</div>
+      <div class="news-meta">Banxico · Mayo 2025</div>
+    </div>
+    <div class="news-card">
+      <span class="news-tag nt-inf">Info</span>
+      <div class="news-title">GBM+ lanza cuenta de ahorro con rendimiento diario sin monto mínimo</div>
+      <div class="news-meta">GBM · Abril 2025</div>
+    </div>
+    <div class="news-card">
+      <span class="news-tag nt-dn">↓ Baja</span>
+      <div class="news-title">Inflación en México cede a 4.1% anual — el mejor dato desde 2021</div>
+      <div class="news-meta">INEGI · Abril 2025</div>
+    </div>
+    <div class="news-card">
+      <span class="news-tag nt-inf">Info</span>
+      <div class="news-title">Nu México alcanza 8 millones de clientes activos y expande su Cuenta Nu</div>
+      <div class="news-meta">Nu · Marzo 2025</div>
+    </div>
+    <div class="news-card">
+      <span class="news-tag nt-up">↑ Alza</span>
+      <div class="news-title">Peso mexicano se fortalece frente al dólar: cotiza en 17.20 MXN/USD</div>
+      <div class="news-meta">Banxico · Mayo 2025</div>
+    </div>
+    <div class="news-card">
+      <span class="news-tag nt-inf">Info</span>
+      <div class="news-title">Kuspit suma 500,000 cuentas activas y lanza acceso a mercado americano desde $1</div>
+      <div class="news-meta">Kuspit · Marzo 2025</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Únete a la comunidad</h2>
+  <p>Comparte tus experiencias, pregunta, aprende y decide mejor junto a miles de mexicanos que ya están invirtiendo.</p>
+  <div class="cta-btns">
+    <a class="btn-white" href="https://x.com/mexisonora" target="_blank">Seguir @mexisonora</a>
+    <a class="btn-ghost" href="https://x.com/search?q=%23mexisonora" target="_blank">Ver la comunidad en X</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>Hecho con cariño por <a href="https://x.com/mexisonora" target="_blank">@mexisonora</a> · Sonora, México</p>
+  <p style="margin-top:.4rem">Solo informativo — no es asesoría financiera regulada. Verifica siempre en el sitio oficial de cada plataforma.</p>
+  <p style="margin-top:.4rem">Todas las plataformas listadas están reguladas por CNBV, CONDUSEF, SOFIPO o SHCP.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  // Mobile nav cta
+  document.getElementById('mob-cta').style.display = window.innerWidth < 700 ? 'inline-flex' : 'none';
+
+  let tasa = 8.25;
+  let chart;
+
+  const fmt = v => '$' + Math.round(v).toLocaleString('es-MX');
+
+  function calcular() {
+    const cap = +document.getElementById('capital').value;
+    const mes = +document.getElementById('meses').value;
+    const apo = +document.getElementById('aporte').value;
+    const rm = tasa / 100 / 12;
+
+    let saldo = cap;
+    const labels = [], dataFinal = [], dataBase = [];
+    let baseAcum = cap;
+
+    for (let i = 1; i <= mes; i++) {
+      saldo = saldo * (1 + rm) + apo;
+      baseAcum += apo;
+      labels.push('M' + i);
+      dataFinal.push(Math.round(saldo));
+      dataBase.push(Math.round(baseAcum));
+    }
+
+    document.getElementById('m-final').textContent = fmt(saldo);
+    document.getElementById('m-ganancia').textContent = fmt(saldo - baseAcum);
+    document.getElementById('m-tasa').textContent = tasa.toFixed(2) + '%';
+
+    if (chart) chart.destroy();
+    chart = new Chart(document.getElementById('rendChart'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Saldo proyectado',
+            data: dataFinal,
+            borderColor: '#1D9E75',
+            backgroundColor: 'rgba(29,158,117,0.07)',
+            fill: true,
+            tension: 0.35,
+            pointRadius: mes > 24 ? 0 : 3,
+            borderWidth: 2.5
+          },
+          {
+            label: 'Capital invertido',
+            data: dataBase,
+            borderColor: '#9FE1CB',
+            backgroundColor: 'transparent',
+            borderDash: [6, 4],
+            fill: false,
+            tension: 0,
+            pointRadius: 0,
+            borderWidth: 1.5
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt(ctx.parsed.y) }
+          }
+        },
+        scales: {
+          x: {
+            ticks: { font: { size: 10 }, color: '#888780', maxTicksLimit: 10 },
+            grid: { color: 'rgba(136,135,128,0.1)' }
+          },
+          y: {
+            ticks: {
+              font: { size: 10 }, color: '#888780',
+              callback: v => '$' + (v >= 1000 ? (v / 1000).toFixed(0) + 'k' : v)
+            },
+            grid: { color: 'rgba(136,135,128,0.1)' }
+          }
+        }
+      }
+    });
+  }
+
+  document.querySelectorAll('.ptab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tasa = parseFloat(btn.dataset.rate);
+      calcular();
+    });
+  });
+
+  document.getElementById('capital').addEventListener('input', function() {
+    document.getElementById('capital-out').textContent = '$' + (+this.value).toLocaleString('es-MX');
+    calcular();
+  });
+  document.getElementById('aporte').addEventListener('input', function() {
+    document.getElementById('aporte-out').textContent = '$' + (+this.value).toLocaleString('es-MX');
+    calcular();
+  });
+  document.getElementById('meses').addEventListener('input', function() {
+    document.getElementById('meses-out').textContent = this.value + ' meses';
+    calcular();
+  });
+
+  calcular();
+</script>
+</body>
+</html>
