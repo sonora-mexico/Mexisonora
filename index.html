@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>profileAI — tu identidad digital → arte visual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: #0a0a0f;
+    color: #f0eee8;
+    min-height: 100vh;
+  }
+
+  .app-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .header {
+    text-align: center;
+    padding: 2.5rem 0 2rem;
+    border-bottom: 1px solid #222;
+    margin-bottom: 2.5rem;
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0.8rem;
+  }
+
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: #e8ff47;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-icon svg { width: 22px; height: 22px; }
+
+  .logo-text {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: #f0eee8;
+  }
+  .logo-text span { color: #e8ff47; }
+
+  .tagline {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: #666;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .input-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 600px) {
+    .input-section { grid-template-columns: 1fr; }
+    .analysis-grid { grid-template-columns: 1fr; }
+    .action-row { flex-direction: column; }
+  }
+
+  .input-card {
+    background: #111118;
+    border: 1px solid #1e1e2e;
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+
+  .input-card:hover { border-color: #333; }
+  .input-card.active { border-color: #e8ff47; }
+
+  .input-card-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 1rem;
+  }
+
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #333; transition: background 0.2s; }
+  .input-card.active .dot { background: #e8ff47; }
+
+  .upload-zone {
+    border: 1.5px dashed #2a2a3a;
+    border-radius: 12px;
+    padding: 2rem 1rem;
+    text-align: center;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .upload-zone:hover, .upload-zone.dragover {
+    border-color: #e8ff47;
+    background: rgba(232,255,71,0.03);
+  }
+
+  .upload-icon {
+    width: 44px; height: 44px;
+    margin: 0 auto 0.8rem;
+    background: #1a1a28;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .upload-icon svg { width: 20px; height: 20px; stroke: #555; }
+  .upload-text { font-size: 0.82rem; color: #555; line-height: 1.5; }
+  .upload-text strong { color: #999; display: block; margin-bottom: 2px; }
+
+  #fileInput { display: none; }
+
+  .preview-img {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e8ff47;
+    display: none;
+    margin: 0 auto 0.5rem;
+  }
+
+  .preview-name { font-size: 0.75rem; color: #888; text-align: center; display: none; }
+
+  .bio-textarea {
+    width: 100%;
+    min-height: 120px;
+    background: #1a1a28;
+    border: 1px solid #2a2a3a;
+    border-radius: 12px;
+    padding: 0.9rem;
+    color: #f0eee8;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    resize: vertical;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .bio-textarea:focus { border-color: #e8ff47; }
+  .bio-textarea::placeholder { color: #3a3a50; }
+
+  .char-count {
+    text-align: right;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: #444;
+    margin-top: 0.4rem;
+  }
+
+  .or-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: #333;
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+  }
+
+  .or-line { flex: 1; height: 1px; background: #1e1e2e; }
+
+  .style-selector { margin-bottom: 2rem; }
+
+  .style-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .style-grid { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+  .style-pill {
+    padding: 0.45rem 1rem;
+    border-radius: 100px;
+    border: 1px solid #222;
+    background: transparent;
+    color: #666;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.5px;
+  }
+
+  .style-pill:hover { border-color: #444; color: #aaa; }
+  .style-pill.selected { border-color: #e8ff47; color: #e8ff47; background: rgba(232,255,71,0.06); }
+
+  .output-type { margin-bottom: 2rem; }
+
+  .output-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+  }
+
+  .output-btn {
+    background: #111118;
+    border: 1px solid #1e1e2e;
+    border-radius: 12px;
+    padding: 1rem 0.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #666;
+  }
+
+  .output-btn:hover { border-color: #333; color: #aaa; }
+  .output-btn.selected { border-color: #e8ff47; color: #e8ff47; background: rgba(232,255,71,0.05); }
+
+  .output-btn-icon { font-size: 1.3rem; margin-bottom: 0.4rem; }
+  .output-btn-label { font-size: 0.7rem; font-family: 'Space Mono', monospace; letter-spacing: 0.5px; }
+
+  .generate-btn {
+    width: 100%;
+    padding: 1.1rem;
+    background: #e8ff47;
+    color: #0a0a0f;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .generate-btn:hover { background: #f5ff80; transform: translateY(-1px); }
+  .generate-btn:active { transform: translateY(0); }
+  .generate-btn:disabled { background: #3a3a2a; color: #666; cursor: not-allowed; transform: none; }
+
+  .result-section { margin-top: 2.5rem; display: none; }
+  .result-section.visible { display: block; }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #1e1e2e;
+  }
+
+  .result-title {
+    font-size: 0.72rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #666;
+  }
+
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: #e8ff47;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #e8ff47;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50% { opacity:0.5; transform:scale(0.8); }
+  }
+
+  .result-canvas {
+    background: #111118;
+    border: 1px solid #1e1e2e;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    min-height: 200px;
+  }
+
+  .result-canvas svg { width: 100%; display: block; }
+
+  .analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .analysis-card {
+    background: #111118;
+    border: 1px solid #1e1e2e;
+    border-radius: 12px;
+    padding: 1rem;
+  }
+
+  .analysis-card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 0.4rem;
+  }
+
+  .analysis-card-value { font-size: 0.88rem; font-weight: 700; color: #e8ff47; }
+
+  .narrative-box {
+    background: #111118;
+    border: 1px solid #1e1e2e;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.82rem;
+    line-height: 1.8;
+    color: #aaa;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .action-row { display: flex; gap: 0.8rem; }
+
+  .action-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: 1px solid #222;
+    background: transparent;
+    color: #888;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .action-btn:hover { border-color: #444; color: #ccc; }
+  .action-btn.primary { border-color: #e8ff47; color: #e8ff47; background: rgba(232,255,71,0.05); }
+  .action-btn.primary:hover { background: rgba(232,255,71,0.1); }
+
+  .loading-state { display: none; text-align: center; padding: 3rem; }
+  .loading-state.visible { display: block; }
+
+  .loading-spinner {
+    width: 40px; height: 40px;
+    border: 2px solid #1e1e2e;
+    border-top-color: #e8ff47;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 1rem;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text { font-family: 'Space Mono', monospace; font-size: 0.72rem; color: #555; letter-spacing: 1px; }
+  .loading-sub { font-size: 0.65rem; color: #333; margin-top: 0.3rem; font-family: 'Space Mono', monospace; }
+
+  .error-box {
+    background: rgba(162,45,45,0.12);
+    border: 1px solid rgba(162,45,45,0.3);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: #f09595;
+    margin-top: 1rem;
+    display: none;
+  }
+
+  .error-box.visible { display: block; }
+
+  .x-username-row {
+    display: flex;
+    margin-bottom: 1.5rem;
+  }
+
+  .x-input-wrap { flex: 1; position: relative; }
+
+  .x-at {
+    position: absolute;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    color: #555;
+  }
+
+  .x-input {
+    width: 100%;
+    background: #1a1a28;
+    border: 1px solid #2a2a3a;
+    border-radius: 10px;
+    padding: 0.75rem 0.9rem 0.75rem 1.8rem;
+    color: #f0eee8;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .x-input:focus { border-color: #e8ff47; }
+  .x-input::placeholder { color: #3a3a50; }
+</style>
+</head>
+<body>
+<div class="app-container">
+
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 22 22" fill="none">
+          <path d="M4 18L10 12M10 12L4 4H8L11 8L14 4H18L12 12M10 12L8 18H12L18 4" stroke="#0a0a0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">profile<span>AI</span></div>
+    </div>
+    <p class="tagline">tu identidad digital → arte visual por IA</p>
+  </div>
+
+  <div class="x-username-row">
+    <div class="x-input-wrap">
+      <span class="x-at">@</span>
+      <input type="text" class="x-input" id="xUsername" placeholder="usuario de X (opcional)" maxlength="50">
+    </div>
+  </div>
+
+  <div class="input-section">
+    <div class="input-card" id="photoCard" onclick="activateCard('photo')">
+      <div class="input-card-label">
+        <div class="dot"></div>
+        foto de perfil
+      </div>
+      <div class="upload-zone" id="uploadZone" onclick="event.stopPropagation(); document.getElementById('fileInput').click()">
+        <div id="uploadContent">
+          <div class="upload-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="3"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <path d="M21 15l-5-5L5 21"/>
+            </svg>
+          </div>
+          <div class="upload-text">
+            <strong>sube tu foto de perfil</strong>
+            jpg, png, webp · max 5mb
+          </div>
+        </div>
+        <img id="previewImg" class="preview-img" alt="preview">
+        <div id="previewName" class="preview-name"></div>
+      </div>
+      <input type="file" id="fileInput" accept="image/*">
+    </div>
+
+    <div class="input-card" id="bioCard" onclick="activateCard('bio')">
+      <div class="input-card-label">
+        <div class="dot"></div>
+        bio de x
+      </div>
+      <textarea class="bio-textarea" id="bioText"
+        placeholder="Pega aquí tu bio de X / Twitter...&#10;&#10;ej: Developer 🚀 | Amante del café | Construyendo el futuro | CDMX 🌮"
+        maxlength="500" oninput="updateCharCount()"></textarea>
+      <div class="char-count"><span id="charCount">0</span>/500</div>
+    </div>
+  </div>
+
+  <div class="or-divider">
+    <div class="or-line"></div>
+    usa uno o ambos para mejores resultados
+    <div class="or-line"></div>
+  </div>
+
+  <div class="style-selector">
+    <span class="style-label">estilo visual</span>
+    <div class="style-grid">
+      <button class="style-pill selected" onclick="selectStyle(this,'cyberpunk')">Cyberpunk</button>
+      <button class="style-pill" onclick="selectStyle(this,'minimalista')">Minimalista</button>
+      <button class="style-pill" onclick="selectStyle(this,'retro')">Retro / Vaporwave</button>
+      <button class="style-pill" onclick="selectStyle(this,'naturaleza')">Naturaleza</button>
+      <button class="style-pill" onclick="selectStyle(this,'arte_digital')">Arte digital</button>
+      <button class="style-pill" onclick="selectStyle(this,'glitch')">Glitch</button>
+      <button class="style-pill" onclick="selectStyle(this,'sorpresa')">✦ Sorpréndeme</button>
+    </div>
+  </div>
+
+  <div class="output-type">
+    <span class="style-label">tipo de output</span>
+    <div class="output-grid">
+      <div class="output-btn selected" onclick="selectOutput(this,'banner')">
+        <div class="output-btn-icon">🖼</div>
+        <div class="output-btn-label">Banner</div>
+      </div>
+      <div class="output-btn" onclick="selectOutput(this,'avatar')">
+        <div class="output-btn-icon">◉</div>
+        <div class="output-btn-label">Avatar art</div>
+      </div>
+      <div class="output-btn" onclick="selectOutput(this,'poster')">
+        <div class="output-btn-icon">▣</div>
+        <div class="output-btn-label">Poster</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="generate-btn" id="generateBtn" onclick="generate()">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M8 1L9.5 6.5L15 8L9.5 9.5L8 15L6.5 9.5L1 8L6.5 6.5L8 1Z" fill="currentColor"/>
+    </svg>
+    Generar diseño
+  </button>
+
+  <div class="error-box" id="errorBox"></div>
+
+  <div class="loading-state" id="loadingState">
+    <div class="loading-spinner"></div>
+    <div class="loading-text" id="loadingText">analizando identidad digital...</div>
+    <div class="loading-sub" id="loadingSub">la IA está interpretando tus datos</div>
+  </div>
+
+  <div class="result-section" id="resultSection">
+    <div class="result-header">
+      <div class="result-title">output generado</div>
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        listo
+      </div>
+    </div>
+    <div class="result-canvas" id="resultCanvas"></div>
+    <div class="analysis-grid" id="analysisGrid"></div>
+    <div class="narrative-box" id="narrativeBox"></div>
+    <div class="action-row">
+      <button class="action-btn" onclick="generate()">↺ regenerar</button>
+      <button class="action-btn" onclick="downloadSVG()">↓ descargar SVG</button>
+      <button class="action-btn primary" onclick="generateVariant()">✦ variante</button>
+    </div>
+  </div>
+
+</div>
+<script>
+  let activeCard = 'bio';
+  let selectedStyle = 'cyberpunk';
+  let selectedOutput = 'banner';
+  let uploadedImageData = null;
+  let lastSVGContent = '';
+  let lastAnalysis = null;
+
+  function activateCard(card) {
+    activeCard = card;
+    document.getElementById('photoCard').classList.toggle('active', card === 'photo');
+    document.getElementById('bioCard').classList.toggle('active', card === 'bio');
+  }
+
+  document.getElementById('fileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    activateCard('photo');
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      uploadedImageData = ev.target.result;
+      document.getElementById('previewImg').src = uploadedImageData;
+      document.getElementById('previewImg').style.display = 'block';
+      document.getElementById('previewName').textContent = file.name;
+      document.getElementById('previewName').style.display = 'block';
+      document.getElementById('uploadContent').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  const uploadZone = document.getElementById('uploadZone');
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault(); uploadZone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const dt = new DataTransfer(); dt.items.add(file);
+      document.getElementById('fileInput').files = dt.files;
+      document.getElementById('fileInput').dispatchEvent(new Event('change'));
+    }
+  });
+
+  function updateCharCount() {
+    const v = document.getElementById('bioText').value.length;
+    document.getElementById('charCount').textContent = v;
+    if (v > 0) activateCard('bio');
+  }
+
+  function selectStyle(el, style) {
+    document.querySelectorAll('.style-pill').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected'); selectedStyle = style;
+  }
+
+  function selectOutput(el, type) {
+    document.querySelectorAll('.output-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected'); selectedOutput = type;
+  }
+
+  function showError(msg) {
+    const box = document.getElementById('errorBox');
+    box.textContent = msg; box.classList.add('visible');
+    setTimeout(() => box.classList.remove('visible'), 6000);
+  }
+
+  function setLoading(on, text='analizando identidad digital...', sub='la IA está interpretando tus datos') {
+    document.getElementById('loadingState').classList.toggle('visible', on);
+    document.getElementById('loadingText').textContent = text;
+    document.getElementById('loadingSub').textContent = sub;
+    document.getElementById('generateBtn').disabled = on;
+    if (on) document.getElementById('resultSection').classList.remove('visible');
+  }
+
+  async function generate() {
+    const bio = document.getElementById('bioText').value.trim();
+    const username = document.getElementById('xUsername').value.trim();
+
+    if (!bio && !uploadedImageData) {
+      showError('agrega una bio o sube una foto de perfil para continuar'); return;
+    }
+
+    setLoading(true, 'analizando tu identidad digital...', 'extrayendo personalidad, keywords y esencia');
+
+    const steps = [
+      ['construyendo paleta de colores...', 'basada en tu energía y personalidad'],
+      ['diseñando composición visual...', 'traduciendo tu esencia a formas y espacio'],
+      ['renderizando diseño final...', 'casi listo tu arte personalizado']
+    ];
+    let step = 0;
+    const timer = setInterval(() => {
+      if (step < steps.length) { setLoading(true, steps[step][0], steps[step][1]); step++; }
+    }, 2200);
+
+    try {
+      const body = buildRequestBody(bio, username);
+      const resp = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      clearInterval(timer);
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error(err.error?.message || `Error ${resp.status}`);
+      }
+
+      const data = await resp.json();
+      const text = data.content.map(b => b.text || '').join('');
+      parseAndRender(text);
+
+    } catch(e) {
+      clearInterval(timer);
+      setLoading(false);
+      showError('error: ' + e.message);
+    }
+  }
+
+  function buildRequestBody(bio, username) {
+    const dims = { banner:'900x300', avatar:'400x400', poster:'600x800' };
+    const styleGuides = {
+      cyberpunk: 'neon colors on dark: electric cyan, hot magenta, acid yellow. Grid lines, glitch effects, circuit patterns.',
+      minimalista: 'Clean white/cream backgrounds, single accent color, generous whitespace, geometric shapes.',
+      retro: 'Pastel pink, lavender, mint, peach. 80s/90s aesthetic, cassette patterns, stars, retro sun, vaporwave grid.',
+      naturaleza: 'Earth tones, botanical elements, flowing organic shapes, greens/browns/sky tones, plant motifs.',
+      arte_digital: 'Abstract geometric art, bold color blocks, asymmetric composition, Bauhaus influence, primary colors.',
+      glitch: 'RGB split effect, scanlines, digital noise, corrupted pixel aesthetic, TV static, error messages.',
+      sorpresa: 'Create a completely unexpected, unique aesthetic that perfectly matches the person\'s vibe in a surprising way.'
+    };
+
+    const systemPrompt = `You are a creative AI visual designer. Analyze the user's X/Twitter profile data and generate a stunning SVG design that visually represents their personality, interests, and identity.
+
+OUTPUT FORMAT: Respond ONLY with valid JSON (no markdown fences, no extra text):
+{
+  "analysis": {
+    "personality": "2-3 word personality type",
+    "vibe": "emotional/aesthetic vibe in 2-4 words",
+    "keywords": ["kw1","kw2","kw3"]
+  },
+  "narrative": "2-3 sentence creative description of what the design represents and why",
+  "svg": "COMPLETE SVG CODE HERE"
+}
+
+DESIGN RULES:
+- Output type: ${selectedOutput} (dimensions approx ${dims[selectedOutput]})
+- Style: ${styleGuides[selectedStyle]}
+- Create a COMPLETE, standalone SVG with correct viewBox for ${selectedOutput}
+- Use abstract visual metaphors, shapes, patterns reflecting the person's identity
+- NO placeholders — real design, fully colored and detailed
+- Include the person's username or key words as visual design elements
+- Make it visually stunning and unique
+- Use SVG defs for gradients/patterns as needed
+- SVG must be 100% self-contained, no external resources`;
+
+    const content = [];
+
+    if (uploadedImageData) {
+      const base64 = uploadedImageData.split(',')[1];
+      const mtype = uploadedImageData.split(';')[0].split(':')[1];
+      content.push({ type: 'image', source: { type: 'base64', media_type: mtype, data: base64 } });
+    }
+
+    let userText = 'Generate a visual design for this X/Twitter profile:\n\n';
+    if (username) userText += `Username: @${username}\n`;
+    if (bio) userText += `Bio: ${bio}\n`;
+    if (uploadedImageData) userText += '\n[Profile photo attached — analyze visual style, colors, vibe, mood]';
+    userText += `\n\nStyle: ${selectedStyle} | Output: ${selectedOutput}`;
+
+    content.push({ type: 'text', text: userText });
+
+    return {
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 4000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content }]
+    };
+  }
+
+  function parseAndRender(rawText) {
+    setLoading(false);
+    try {
+      const clean = rawText.replace(/^```json\s*/i,'').replace(/```\s*$/,'').trim();
+      const json = JSON.parse(clean);
+      lastAnalysis = json.analysis;
+      lastSVGContent = json.svg;
+
+      document.getElementById('resultCanvas').innerHTML = json.svg;
+      document.getElementById('analysisGrid').innerHTML = `
+        <div class="analysis-card">
+          <div class="analysis-card-label">personalidad</div>
+          <div class="analysis-card-value">${json.analysis.personality}</div>
+        </div>
+        <div class="analysis-card">
+          <div class="analysis-card-label">vibe</div>
+          <div class="analysis-card-value">${json.analysis.vibe}</div>
+        </div>
+        <div class="analysis-card">
+          <div class="analysis-card-label">keywords</div>
+          <div class="analysis-card-value" style="font-size:0.72rem">${json.analysis.keywords.join(' · ')}</div>
+        </div>
+      `;
+      document.getElementById('narrativeBox').textContent = json.narrative;
+      document.getElementById('resultSection').classList.add('visible');
+      document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch(e) {
+      showError('Error al parsear respuesta. Intenta de nuevo.');
+      console.error(e, rawText);
+    }
+  }
+
+  async function generateVariant() {
+    if (!lastAnalysis) return;
+    const allStyles = ['cyberpunk','minimalista','retro','naturaleza','arte_digital','glitch','sorpresa'];
+    const next = allStyles.find(s => s !== selectedStyle) || 'sorpresa';
+    document.querySelectorAll('.style-pill').forEach(p => {
+      if (p.getAttribute('onclick') && p.getAttribute('onclick').includes(`'${next}'`)) selectStyle(p, next);
+    });
+    await generate();
+  }
+
+  function downloadSVG() {
+    if (!lastSVGContent) return;
+    const blob = new Blob([lastSVGContent], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'profileai-design.svg';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
+  }
+</script>
+</body>
+</html>
